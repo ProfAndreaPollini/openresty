@@ -1,0 +1,12 @@
+services:
+  openresty:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: proxy_openresty
+    ports:
+      - "3128:3128"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:delegated
+      - ./nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:delegated
+      - ./nginx/logs:/var/log/nginx
