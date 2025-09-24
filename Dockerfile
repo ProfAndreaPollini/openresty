@@ -11,9 +11,11 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     wget \
     git \
+    unzip \
     libkrb5-dev \
     luarocks \
-    curl
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Aggiungi questa sezione per installare Rust 🦀
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -31,8 +33,9 @@ RUN wget https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz &&
     unzip master.zip && \
     mv ngx_http_proxy_connect_module-master ./ngx_http_proxy_connect_module
 
-# Installa la libreria lua-resty-ldap
-RUN luarocks install lua-resty-ldap
+# Installa le librerie Lua necessarie (ldap e http client)
+RUN luarocks install lua-resty-ldap \
+    && luarocks install lua-resty-http
 
 
 # Compila OpenResty con il modulo SPNEGO
