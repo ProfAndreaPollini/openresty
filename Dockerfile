@@ -7,6 +7,7 @@ FROM debian:bookworm
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpcre2-dev \
+    libpcre3-dev \
     libssl-dev \
     zlib1g-dev \
     wget \
@@ -36,12 +37,12 @@ RUN wget https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz &&
     mv ngx_http_proxy_connect_module-master ./ngx_http_proxy_connect_module
 
 # Installa le librerie Lua necessarie (ldap e http client)
-RUN luarocks install lua-resty-ldap \
+RUN luarocks install lua-resty-ldap PCRE2_DIR=/usr \
     && luarocks install lua-resty-http \
     && luarocks install lua-cjson \
     && luarocks install lua-resty-openssl \
     && luarocks install casbin \
-    && luarocks install lua-resty-casbin
+    && luarocks install lua-resty-casbin PCRE2_DIR=/usr
 
 # Compila OpenResty con il modulo SPNEGO
 RUN cd openresty-${OPENRESTY_VERSION} && \
