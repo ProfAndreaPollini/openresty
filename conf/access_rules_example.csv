@@ -1,0 +1,7 @@
+p, r.sub.name == "alice" && r.sub.group == "admin", r.obj.domain == "httpbin.io", r.act == "connect", r.env.ip.indexOf("172.25.") == 0, allow
+p, r.sub.name == "alice" && r.sub.group == "admin", r.obj.domain == "example.com", r.act == "connect", r.env.ip.indexOf("172.25.") == 0, allow
+p, r.sub.name == "bob" && r.sub.group == "user", r.obj.domain == "httpbin.io", r.act == "connect", r.env.ip.indexOf("172.25.") == 0, allow
+p, r.sub.authenticated == true && r.sub.group == "developer", r.obj.domain.indexOf(".dev") > 0, r.act == "connect", true, allow
+p, r.sub.group == "guest", r.obj.domain == "public.example.com", r.act == "connect", r.env.time >= 9 && r.env.time <= 17, allow
+p,  true, r.obj.domain == "google.com", r.act == "connect", true, deny
+p, true, true, true, true, allow

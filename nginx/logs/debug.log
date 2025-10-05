@@ -1,41 +1,46 @@
-2025/09/24 15:58:31 [error] 7#0: *1 lua entry thread aborted: runtime error: /etc/nginx/lua/openfga_check.lua:17: attempt to concatenate field 'proxy_connect_host' (a nil value)
-stack traceback:
-coroutine 0:
-	/etc/nginx/lua/openfga_check.lua: in main chunk, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:03:05 [error] 7#0: *1 lua entry thread aborted: runtime error: /etc/nginx/lua/openfga_check.lua:17: attempt to concatenate field 'proxy_connect_host' (a nil value)
-stack traceback:
-coroutine 0:
-	/etc/nginx/lua/openfga_check.lua: in main chunk, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:03:43 [error] 8#0: *2 [lua] openfga_check.lua:21: Could not determine destination host., client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:04:00 [error] 8#0: *1 [lua] openfga_check.lua:21: Could not determine destination host., client: 172.24.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:04:01 [error] 7#0: *2 [lua] openfga_check.lua:21: Could not determine destination host., client: 172.24.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:11 [debug] 10#0: *3 [lua] http_connect.lua:253: connect(): poolname: http:host.docker.internal:18080:nil::nil:::
-2025/09/24 16:05:11 [warn] 10#0: *3 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: nil, client: 172.24.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:11 [error] 10#0: *3 [lua] openfga_check.lua:55: Error calling OpenFGA: host.docker.internal could not be resolved (3: Host not found), client: 172.24.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:11 [info] 10#0: *3 client 172.24.0.1 closed keepalive connection
-2025/09/24 16:05:46 [debug] 9#0: *5 [lua] http_connect.lua:253: connect(): poolname: http:openfga:18080:nil::nil:::
-2025/09/24 16:05:46 [warn] 9#0: *5 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: nil, client: 172.24.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:46 [error] 9#0: *5 [lua] openfga_check.lua:55: Error calling OpenFGA: openfga could not be resolved (3: Host not found), client: 172.24.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:46 [info] 9#0: *5 client 172.24.0.1 closed keepalive connection
-2025/09/24 16:05:58 [debug] 7#0: *1 [lua] http_connect.lua:253: connect(): poolname: http:openfga:18080:nil::nil:::
-2025/09/24 16:05:58 [warn] 7#0: *1 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: nil, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:58 [error] 7#0: *1 [lua] openfga_check.lua:55: Error calling OpenFGA: openfga could not be resolved (3: Host not found), client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:05:58 [info] 7#0: *1 client 172.25.0.1 closed keepalive connection
-2025/09/24 16:06:05 [debug] 8#0: *3 [lua] http_connect.lua:253: connect(): poolname: http:openfga:8080:nil::nil:::
-2025/09/24 16:06:05 [warn] 8#0: *3 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: nil, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:06:05 [error] 8#0: *3 [lua] openfga_check.lua:55: Error calling OpenFGA: openfga could not be resolved (3: Host not found), client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:06:05 [info] 8#0: *3 client 172.25.0.1 closed keepalive connection
-2025/09/24 16:06:22 [debug] 7#0: *1 [lua] http_connect.lua:253: connect(): poolname: http:openfga:8080:nil::nil:::
-2025/09/24 16:06:22 [warn] 7#0: *1 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: nil, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:06:22 [error] 7#0: *1 [lua] openfga_check.lua:55: Error calling OpenFGA: openfga could not be resolved (3: Host not found), client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:06:22 [info] 7#0: *1 client 172.25.0.1 closed keepalive connection
-2025/09/24 16:08:37 [debug] 8#0: *3 [lua] http_connect.lua:253: connect(): poolname: http:host.docker.internal:18080:nil::nil:::
-2025/09/24 16:08:37 [warn] 8#0: *3 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: nil, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:08:37 [error] 8#0: *3 [lua] openfga_check.lua:55: Error calling OpenFGA: host.docker.internal could not be resolved (3: Host not found), client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:08:37 [info] 8#0: *3 client 172.25.0.1 closed keepalive connection
-2025/09/24 16:15:07 [debug] 8#0: *1 [lua] http_connect.lua:253: connect(): poolname: http:172.26.240.1:18080:nil::nil:::
-2025/09/24 16:15:07 [warn] 8#0: *1 [lua] openfga_check.lua:51: OpenFGA check for user='alice' to object='domain:httpbin.io'. Response: {"code":"latest_authorization_model_not_found","message":"No authorization models found for store '01K5Y4R832EZ1E2EK2P4DV2XKC'"}
-, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:15:07 [error] 8#0: *1 [lua] openfga_check.lua:55: Error calling OpenFGA: {"code":"latest_authorization_model_not_found","message":"No authorization models found for store '01K5Y4R832EZ1E2EK2P4DV2XKC'"}
-, client: 172.25.0.1, server: , request: "CONNECT httpbin.io:443 HTTP/1.1", host: "httpbin.io:443"
-2025/09/24 16:15:07 [info] 8#0: *1 client 172.25.0.1 closed keepalive connection
+2025/10/05 09:23:36 [info] 7#0: *2 [lua] casbin_check.lua:118: get_casbin(): Successfully loaded Casbin module, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [info] 7#0: *2 [lua] casbin_check.lua:324: abac_check(): ABAC Request: {"env":{"ip":"172.25.0.1","time":9,"user_agent":"curl\/8.14.1","connection_type":"proxy","day_of_week":"0"},"obj":{"protocol":"http","domain":"andreapollini.com","full_host":"andreapollini.com","port":"443"},"act":"connect","sub":{"authenticated":false,"name":"alice","group":"guest","role":"user"}}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [info] 7#0: *2 [lua] casbin_check.lua:328: abac_check(): Attempting to create Casbin enforcer with model: /etc/nginx/conf/access_model.conf and policy: /etc/nginx/conf/access_rules.csv, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFOModel: 
+, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO[m.m]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO{RM = {}, key = "m", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {}, value = "eval(p_sub_rule) && eval(p_obj_rule) && eval(p_act_rule) && eval(p_env_rule)"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO[r.r]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO{RM = {}, key = "r", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {"r_sub", "r_obj", "r_act", "r_env"}, value = "sub, obj, act, env"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO[e.e]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO{RM = {}, key = "e", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {}, value = "some(where (p_eft == allow))"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO[p.p]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO{RM = {}, key = "p", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {"p_sub_rule", "p_obj_rule", "p_act_rule", "p_env_rule", "p_eft"}, value = "sub_rule, obj_rule, act_rule, env_rule, eft"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFOPolicy: 
+, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFOp:   sub_rule, obj_rule, act_rule, env_rule, eft:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFO{{"r.sub.authenticated == false", "r.obj.domain == \"andreapollini.com\"", "r.act == \"connect\"", "true", "deny"}, {"true", "true", "true", "true", "deny"}}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [info] 7#0: *2 [lua] casbin_check.lua:152: create_enforcer_safe(): Successfully created Casbin enforcer using approach 1, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [info] 7#0: *2 [lua] casbin_check.lua:345: abac_check(): Successfully created Casbin enforcer, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [notice] 7#0: *2 [lua] Log.lua:29: info(): INFORequest: { authenticated = false, name = alice, group = guest, role = user }, { protocol = http, domain = andreapollini.com, full_host = andreapollini.com, port = 443 }, connect, { ip = 172.25.0.1, time = 9, user_agent = curl/8.14.1, connection_type = proxy, day_of_week = 0 } ---> false
+, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [warn] 7#0: *2 [lua] casbin_check.lua:362: abac_check(): Access DENIED by Casbin ABAC for user=alice group=guest to domain=andreapollini.com from IP=172.25.0.1, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:23:36 [info] 7#0: *2 client 172.25.0.1 closed keepalive connection
+2025/10/05 09:24:42 [info] 8#0: *3 [lua] casbin_check.lua:118: get_casbin(): Successfully loaded Casbin module, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [info] 8#0: *3 [lua] casbin_check.lua:324: abac_check(): ABAC Request: {"env":{"ip":"172.25.0.1","time":9,"user_agent":"curl\/8.14.1","connection_type":"proxy","day_of_week":"0"},"obj":{"protocol":"http","domain":"andreapollini.com","full_host":"andreapollini.com","port":"443"},"act":"connect","sub":{"authenticated":false,"name":"alice","group":"guest","role":"user"}}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [info] 8#0: *3 [lua] casbin_check.lua:328: abac_check(): Attempting to create Casbin enforcer with model: /etc/nginx/conf/access_model.conf and policy: /etc/nginx/conf/access_rules.csv, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFOModel: 
+, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO[m.m]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO{RM = {}, key = "m", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {}, value = "eval(p_sub_rule) && eval(p_obj_rule) && eval(p_act_rule) && eval(p_env_rule)"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO[r.r]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO{RM = {}, key = "r", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {"r_sub", "r_obj", "r_act", "r_env"}, value = "sub, obj, act, env"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO[e.e]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO{RM = {}, key = "e", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {}, value = "some(where (p_eft == allow))"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO[p.p]:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO{RM = {}, key = "p", policy = {}, policyMap = {}, priorityIndex = -1, tokens = {"p_sub_rule", "p_obj_rule", "p_act_rule", "p_env_rule", "p_eft"}, value = "sub_rule, obj_rule, act_rule, env_rule, eft"}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFOPolicy: 
+, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFOp:   sub_rule, obj_rule, act_rule, env_rule, eft:, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFO{{"r.sub.authenticated == false", "r.obj.domain == \"andreapollini.com\"", "true", "true", "deny"}, {"true", "true", "true", "true", "deny"}}, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [info] 8#0: *3 [lua] casbin_check.lua:152: create_enforcer_safe(): Successfully created Casbin enforcer using approach 1, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [info] 8#0: *3 [lua] casbin_check.lua:345: abac_check(): Successfully created Casbin enforcer, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [notice] 8#0: *3 [lua] Log.lua:29: info(): INFORequest: { authenticated = false, name = alice, group = guest, role = user }, { protocol = http, domain = andreapollini.com, full_host = andreapollini.com, port = 443 }, connect, { ip = 172.25.0.1, time = 9, user_agent = curl/8.14.1, connection_type = proxy, day_of_week = 0 } ---> false
+, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [warn] 8#0: *3 [lua] casbin_check.lua:362: abac_check(): Access DENIED by Casbin ABAC for user=alice group=guest to domain=andreapollini.com from IP=172.25.0.1, client: 172.25.0.1, server: , request: "CONNECT andreapollini.com:443 HTTP/1.1", host: "andreapollini.com:443"
+2025/10/05 09:24:42 [info] 8#0: *3 client 172.25.0.1 closed keepalive connection
