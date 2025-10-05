@@ -1,3 +1,4 @@
 
 nginx/logs/access.log
 nginx/logs/error.log
+nginx/logs/debug.log
