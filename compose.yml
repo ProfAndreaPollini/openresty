@@ -1,4 +1,59 @@
+networks:
+  openfga:
+    driver: bridge
+  proxy:
+    driver: bridge
+
 services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    networks:
+      - openfga
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    image: openfga/openfga:latest
+    container_name: migrate
+    command: migrate
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/postgres?sslmode=disable
+    networks:
+      - openfga
+
+  openfga:
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    image: openfga/openfga:latest
+    container_name: openfga
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/postgres?sslmode=disable
+      - OPENFGA_LOG_FORMAT=json
+    command: run
+    networks:
+      - openfga
+    ports:
+      # Needed for the http server
+      - "18080:8080"
+      # Needed for the grpc server (if used)
+      - "8081:8081"
+      # Needed for the playground (Do not enable in prod!)
+      - "3000:3000"
   openresty:
     build:
       context: .
@@ -6,7 +61,13 @@ services:
     container_name: proxy_openresty
     ports:
       - "3128:3128"
+    networks:
+      - openfga
+      - proxy
+    environment:
+      - LUA_PATH=/usr/local/share/lua/5.1/?.lua;;/usr/local/share/lua/5.1/?/init.lua;;/usr/local/openresty/lualib/?.lua;;/usr/local/openresty/lualib/?/init.lua
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:delegated
       - ./nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:delegated
       - ./nginx/logs:/var/log/nginx
+      - ./nginx/lua:/etc/nginx/lua:delegated

@@ -6,7 +6,7 @@ FROM debian:bookworm
 # Installa le dipendenze necessarie
 RUN apt-get update && apt-get install -y \
     build-essential \
-    libpcre3-dev \
+    libpcre2-dev \
     libssl-dev \
     zlib1g-dev \
     wget \
@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y \
 # Aggiungi questa sezione per installare Rust 🦀
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
+
+ENV PCRE2_DIR=/usr
 
 # Definisci le versioni
 ARG OPENRESTY_VERSION=1.25.3.1
@@ -35,8 +37,11 @@ RUN wget https://openresty.org/download/openresty-${OPENRESTY_VERSION}.tar.gz &&
 
 # Installa le librerie Lua necessarie (ldap e http client)
 RUN luarocks install lua-resty-ldap \
-    && luarocks install lua-resty-http
-
+    && luarocks install lua-resty-http \
+    && luarocks install lua-cjson \
+    && luarocks install lua-resty-openssl \
+    && luarocks install casbin \
+    && luarocks install lua-resty-casbin
 
 # Compila OpenResty con il modulo SPNEGO
 RUN cd openresty-${OPENRESTY_VERSION} && \
