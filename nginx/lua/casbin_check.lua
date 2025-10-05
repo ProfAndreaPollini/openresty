@@ -1,5 +1,135 @@
 local cjson = require("cjson")
 
+local vlan_map = nil
+local vlan_map_mtime = 0
+local vlan_map_path = "/etc/nginx/conf/vlan_map.json"
+
+local function ip_to_int(ip)
+    if not ip then return nil end
+    local a, b, c, d = ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
+    if not a then return nil end
+    return tonumber(a) * 16777216 + tonumber(b) * 65536 + tonumber(c) * 256 + tonumber(d)
+end
+
+local function cidr_match(ip, cidr)
+    -- cidr like "172.25.0.0/16"
+    if not ip or not cidr then return false end
+    local base, mask = cidr:match("^([^/]+)/(%d+)$")
+    if not base or not mask then return false end
+    local ipi = ip_to_int(ip)
+    local basei = ip_to_int(base)
+    if not ipi or not basei then return false end
+    local shift = tonumber(mask)
+    if shift < 0 or shift > 32 then return false end
+    -- compute mask as integer: top 'shift' bits are 1
+    local mask_int = 0
+    if shift == 0 then
+        mask_int = 0
+    else
+        mask_int = 0
+        for i = 1, shift do
+            mask_int = mask_int + 2 ^ (32 - i)
+        end
+    end
+
+    local function bit_and(a, b)
+        -- safe AND for non-negative 32-bit integers
+        local res = 0
+        local bit = 1
+        for i = 0, 31 do
+            local ai = a % 2
+            local bi = b % 2
+            if ai == 1 and bi == 1 then
+                res = res + bit
+            end
+            a = math.floor(a / 2)
+            b = math.floor(b / 2)
+            bit = bit * 2
+        end
+        return res
+    end
+
+    return bit_and(ipi, mask_int) == bit_and(basei, mask_int)
+end
+
+local function load_vlan_map()
+    -- lightweight reload-on-change (not perfect but simple)
+    local attr = io.popen("powershell -NoProfile -Command \"if (Test-Path -Path '" ..
+        vlan_map_path:gsub("'", "''") ..
+        "') { (Get-Item '" ..
+        vlan_map_path:gsub("'", "''") .. "').LastWriteTimeUtc.ToFileTimeUtc() } else { '' }\" 2>$null")
+    local mtime = attr and attr:read("*a") or ""
+    if attr then attr:close() end
+    mtime = tonumber((mtime or ""):match("%d+")) or 0
+
+    if vlan_map and vlan_map_mtime == mtime then
+        return vlan_map
+    end
+
+    local f = io.open(vlan_map_path, "r")
+    if not f then
+        vlan_map = { exact = {}, cidr = {} }
+        vlan_map_mtime = mtime
+        return vlan_map
+    end
+    local content = f:read("*a")
+    f:close()
+
+    local ok, parsed = pcall(cjson.decode, content)
+    if not ok or type(parsed) ~= "table" then
+        ngx.log(ngx.ERR, "Failed to parse VLAN map: ", tostring(parsed))
+        vlan_map = { exact = {}, cidr = {} }
+        vlan_map_mtime = mtime
+        return vlan_map
+    end
+
+    -- expected shape:
+    -- { "exact": { "172.25.0.1": "vlan10", ... }, "cidr": [ { "cidr": "172.25.0.0/16", "vlan": "vlan20" }, ... ] }
+    vlan_map = parsed
+    vlan_map.exact = vlan_map.exact or {}
+    vlan_map.cidr = vlan_map.cidr or {}
+    vlan_map_mtime = mtime
+    return vlan_map
+end
+
+local function get_vlan_from_header()
+    local h = ngx.req.get_headers()
+    local v = h["x-vlan"] or h["X-VLAN"]
+    if not v then return nil end
+    v = tostring(v):gsub("^%s+", ""):gsub("%s+$", "")
+    -- validate: allow only alphanum, dash, underscore
+    if v:match("^[%w%-_]+$") then
+        -- If you accept header ONLY from trusted proxies, you may want to check ngx.var.remote_addr here
+        return v
+    end
+    return nil
+end
+
+local function get_vlan_from_ip(client_ip)
+    local vm = load_vlan_map()
+    if vm.exact and vm.exact[client_ip] then
+        return vm.exact[client_ip]
+    end
+    if vm.cidr then
+        for _, entry in ipairs(vm.cidr) do
+            if entry.cidr and entry.vlan and cidr_match(client_ip, entry.cidr) then
+                return entry.vlan
+            end
+        end
+    end
+    return nil
+end
+
+local function detect_vlan(client_ip)
+    -- Try header first (fast)
+    local from_header = get_vlan_from_header()
+    if from_header then
+        return from_header
+    end
+    -- Fallback to IP->VLAN map
+    return get_vlan_from_ip(client_ip)
+end
+
 local function require_without_global_warning(module_name)
     if module_name ~= "logging" then
         return pcall(require, module_name)
@@ -232,13 +362,23 @@ local function abac_check()
         local client_ip = ngx.var.remote_addr or ngx.var.http_x_forwarded_for or "unknown"
         local current_time = os.date("%H")
 
-        return {
+        local env = {
             ip = client_ip,
             time = tonumber(current_time),
             day_of_week = os.date("%w"),
             user_agent = ngx.var.http_user_agent or "",
             connection_type = "proxy"
         }
+
+        -- attach VLAN information
+        local ok, vlan = pcall(detect_vlan, client_ip)
+        if ok and vlan then
+            env.vlan = vlan
+        else
+            env.vlan = nil
+        end
+
+        return env
     end
 
     -- Extract resource/object information

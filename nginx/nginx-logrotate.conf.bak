@@ -1,0 +1,18 @@
+/var/log/nginx/access.log /var/log/nginx/debug.log /var/log/nginx/error.log {
+    daily
+    missingok
+    rotate 365
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    dateext
+    dateformat -%Y%m%d-%H%M%S
+    maxage 365
+    create 0640 nginx adm
+    postrotate
+        if [ -s /var/run/nginx.pid ]; then
+            kill -USR1 "$(cat /var/run/nginx.pid)"
+        fi
+    endscript
+}

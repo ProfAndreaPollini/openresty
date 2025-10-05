@@ -25,3 +25,4 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/lua:/etc/nginx/lua:delegated
       - ./conf:/etc/nginx/conf:delegated
+      

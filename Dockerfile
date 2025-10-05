@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libkrb5-dev \
     luarocks \
     curl \
+    logrotate \
     && rm -rf /var/lib/apt/lists/*
 
 # Aggiungi questa sezione per installare Rust 🦀
@@ -59,6 +60,10 @@ RUN cd openresty-${OPENRESTY_VERSION} && \
 # COPY user_groups.lua /usr/local/openresty/nginx/conf/user_groups.lua
 # Assicurati di avere il tuo file keytab nella stessa directory del Dockerfile
 # COPY http.keytab /etc/nginx/http.keytab
+
+# Crea la directory per i log di nginx
+COPY ./nginx/nginx-logrotate.conf /etc/logrotate.d/nginx
+RUN chmod 644 /etc/logrotate.d/nginx
 
 # Esponi la porta del proxy
 EXPOSE 3128
