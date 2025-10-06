@@ -25,4 +25,14 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/lua:/etc/nginx/lua:delegated
       - ./conf:/etc/nginx/conf:delegated
+    restart: unless-stopped
+    logging:
+      driver: loki
+      options:
+        # Sostituisci con l'IP pubblico o privato della tua Macchina B
+        loki-url: "http://host.docker.internal:3100/loki/api/v1/push"
+        # Puoi aggiungere etichette per filtrare meglio i log in Grafana
+        loki-batch-size: "400"
+        loki-retries: "2"
+        labels: "job=openresty-proxy"
       

@@ -1,0 +1,40 @@
+# Loki configuration migrated to modern (v2+) schema
+# Tested for Loki v2.x - use boltdb-shipper for local single-node setups.
+# Migration notes:
+# - Original used schema v11 + boltdb index; boltdb-shipper is recommended
+#   for newer Loki versions and single-node deployments. If you rely on
+#   older on-disk indexes, consider migrating or keeping an older Loki.
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+ingester:
+  lifecycler:
+    address: host.docker.internal
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+    final_sleep: 0s
+  chunk_idle_period: 5m
+  chunk_retain_period: 30s
+
+schema_config:
+  configs:
+    - from: 2020-05-15
+      store: boltdb
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 168h
+
+limits_config: {}
+
+storage_config:
+  boltdb:
+    directory: /tmp/loki/index
+  filesystem:
+    directory: /tmp/loki/chunks

@@ -1,0 +1,31 @@
+services:
+  loki:
+    # Pin to a Loki 2.x release compatible with the current config
+    image: grafana/loki:2.8.2
+    container_name: loki
+    # Esponi la porta 3100 sulla rete della macchina host.
+    # Questo è FONDAMENTALE per ricevere i log dall'altra macchina.
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki-config.yaml:/etc/loki/local-config.yaml:ro
+      - ./monitoring/loki-wal:/wal
+      - ./monitoring/loki-index:/tmp/loki/index
+      - ./monitoring/loki-chunks:/tmp/loki/chunks
+    command: -config.file=/etc/loki/local-config.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana-provisioning:/etc/grafana/provisioning
+    # Grafana e Loki sono sullo stesso host e sulla stessa rete Docker (creata da questo file),
+    # quindi Grafana può ancora contattare Loki usando il nome del servizio 'loki'.
+    depends_on:
+      - loki
+
+volumes:
+  grafana-data:

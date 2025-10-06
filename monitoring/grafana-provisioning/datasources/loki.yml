@@ -1,0 +1,10 @@
+# monitoring/grafana-provisioning/datasources/loki.yml
+apiVersion: 1
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    # Usa il nome del servizio 'loki' e la sua porta,
+    # Docker si occuperà della risoluzione del nome.
+    url: http://loki:3100
+    isDefault: true
