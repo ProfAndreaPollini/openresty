@@ -15,8 +15,7 @@ services:
     container_name: proxy_openresty
     ports:
       - "3128:3128"
-    networks:
-      - proxy
+    network_mode: host
     environment:
       - LUA_PATH=/usr/local/share/lua/5.1/?.lua;;/usr/local/share/lua/5.1/?/init.lua;;/usr/local/openresty/lualib/?.lua;;/usr/local/openresty/lualib/?/init.lua
     volumes:
@@ -25,14 +24,16 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/lua:/etc/nginx/lua:delegated
       - ./conf:/etc/nginx/conf:delegated
+      - ./nginx/krb5.conf:/etc/krb5.conf:ro
+      - ./nginx/proxy.keytab:/etc/nginx/krb5.keytab:delegated
     restart: unless-stopped
-    logging:
-      driver: loki
-      options:
-        # Sostituisci con l'IP pubblico o privato della tua Macchina B
-        loki-url: "http://host.docker.internal:3100/loki/api/v1/push"
-        # Puoi aggiungere etichette per filtrare meglio i log in Grafana
-        loki-batch-size: "400"
-        loki-retries: "2"
-        labels: "job=openresty-proxy"
+    # logging:
+    #   driver: loki
+    #   options:
+    #     # Sostituisci con l'IP pubblico o privato della tua Macchina B
+    #     loki-url: "http://host.docker.internal:3100/loki/api/v1/push"
+    #     # Puoi aggiungere etichette per filtrare meglio i log in Grafana
+    #     loki-batch-size: "400"
+    #     loki-retries: "2"
+    #     labels: "job=openresty-proxy"
       

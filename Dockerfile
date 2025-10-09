@@ -17,6 +17,11 @@ RUN apt-get update && apt-get install -y \
     luarocks \
     curl \
     logrotate \
+    krb5-user \
+    iputils-ping \
+    netcat-traditional \
+    nano \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Aggiungi questa sezione per installare Rust 🦀
@@ -59,7 +64,7 @@ RUN cd openresty-${OPENRESTY_VERSION} && \
 # COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 # COPY user_groups.lua /usr/local/openresty/nginx/conf/user_groups.lua
 # Assicurati di avere il tuo file keytab nella stessa directory del Dockerfile
-# COPY http.keytab /etc/nginx/http.keytab
+COPY ./nginx/http.keytab /etc/nginx/http.keytab
 
 # Crea la directory per i log di nginx
 COPY ./nginx/nginx-logrotate.conf /etc/logrotate.d/nginx
